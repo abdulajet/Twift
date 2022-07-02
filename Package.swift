@@ -10,9 +10,15 @@ let package = Package(
   products: [
     .library(name: "Twift", targets: ["Twift"])
   ],
+  dependencies: [
+    .package(url: "https://github.com/apple/swift-crypto.git", "1.0.0" ..< "3.0.0")
+  ],
   targets: [
     .target(
       name: "Twift",
+      dependencies: [
+        .product(name: "Crypto", package: "swift-crypto")
+      ],
       path: "Sources"),
     .testTarget(
       name: "TwiftTests",

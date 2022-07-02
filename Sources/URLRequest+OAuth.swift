@@ -21,8 +21,16 @@
 /// - Author: Markus Wanke
 /// - Copyright: 2017
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#else
+import Crypto
+#endif
 
 internal class OAuthHelper
 {

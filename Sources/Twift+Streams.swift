@@ -1,3 +1,4 @@
+#if !os(Linux)
 import Foundation
 
 extension Twift {
@@ -134,3 +135,4 @@ internal struct FilteredStreamRuleModifier: Codable {
   var add: [MutableFilteredStreamRule] = []
   var delete: [FilteredStreamRule.ID] = []
 }
+#endif

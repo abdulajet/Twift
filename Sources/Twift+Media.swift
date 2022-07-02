@@ -11,6 +11,7 @@ public enum MediaCategory: String {
   case tweetGif = "tweet_gif"
 }
 
+#if !os(Linux)
 extension Twift {
   // MARK: Chunked Media Upload
   /// Uploads media data and returns an ID string that can be used to attach media to Tweets
@@ -217,6 +218,7 @@ extension Twift {
     return urlComponents
   }
 }
+#endif
 
 fileprivate func chunkData(_ data: Data) -> [String] {
   let dataLen = data.count

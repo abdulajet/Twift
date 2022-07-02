@@ -1,5 +1,8 @@
 import Foundation
+
+#if canImport(AuthenticationServices)
 import AuthenticationServices
+#endif
 
 extension Twift {
   // MARK: Authentication methods
@@ -38,6 +41,7 @@ extension Twift {
     case appOnly
   }
   
+#if canImport(AuthenticationServices)
   /// A convenience class for acquiring user access token
   public class Authentication: NSObject, ASWebAuthenticationPresentationContextProviding {
     /// Request user credentials by presenting Twitter's web-based authentication flow
@@ -134,8 +138,10 @@ extension Twift {
       return ASPresentationAnchor()
     }
   }
+#endif
 }
 
+#if canImport(AuthenticationServices)
 extension Twift.Authentication {
   /// Authenticates the user using Twitter's OAuth 2.0 PKCE flow.
   /// - Parameters:
@@ -250,6 +256,7 @@ extension Twift.Authentication {
     throw TwiftError.UnknownError("Unable to fetch and decode the OAuth 2.0 user context.")
   }
 }
+#endif
 
 /// An OAuth 2.0 user authentication object
 public struct OAuth2User: Codable {
@@ -270,7 +277,7 @@ public struct OAuth2User: Codable {
   
   /// Whether or not the access token has expired (i.e. whether `expiresAt` is in the past).
   public var expired: Bool {
-    expiresAt < .now
+    expiresAt < Date()
   }
   
   internal enum CodingKeys: String, CodingKey {
@@ -317,7 +324,7 @@ public struct OAuth2User: Codable {
     var container = encoder.container(keyedBy: CodingKeys.self)
     try container.encode(accessToken, forKey: .accessToken)
     try container.encodeIfPresent(refreshToken, forKey: .refreshToken)
-    try container.encode(Date.now.distance(to: expiresAt), forKey: .expiresAt)
+    try container.encode(Date().distance(to: expiresAt), forKey: .expiresAt)
     try container.encodeIfPresent(clientId, forKey: .clientId)
     
     let scopes = scope.map(\.rawValue).joined(separator: " ")
